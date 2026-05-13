@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ROOT FIX 0513f - Game Board</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#233144",
+                        "surface-variant": "#353436",
+                        "surface": "#131315",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-primary-container": "#798098",
+                        "surface-tint": "#bec6e0",
+                        "tertiary-container": "#231500",
+                        "secondary-container": "#3c4a5e",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131315",
+                        "inverse-surface": "#e4e2e4",
+                        "on-tertiary": "#3e2d11",
+                        "on-surface": "#e4e2e4",
+                        "on-tertiary-container": "#957d5a",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#45464d",
+                        "on-tertiary-fixed": "#271901",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "primary-container": "#0f172a",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-bright": "#39393b",
+                        "inverse-primary": "#565e74",
+                        "tertiary-fixed": "#fcdeb5",
+                        "secondary": "#b9c7e0",
+                        "on-secondary-container": "#abb9d2",
+                        "surface-container-low": "#1b1b1d",
+                        "background": "#131315",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#303032",
+                        "secondary-fixed": "#d5e3fd",
+                        "on-background": "#e4e2e4",
+                        "primary": "#bec6e0",
+                        "outline": "#909097",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary": "#dec29a",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "primary-fixed": "#dae2fd",
+                        "on-primary": "#283044",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container": "#1f1f21",
+                        "surface-container-high": "#2a2a2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "grid-gutter": "16px",
+                        "container-padding": "24px",
+                        "touch-target-min": "44px",
+                        "block-size": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Hanken Grotesk"],
+                        "button-text": ["Hanken Grotesk"],
+                        "hud-label": ["JetBrains Mono"],
+                        "hud-value": ["Hanken Grotesk"],
+                        "display-score": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button-text": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "hud-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "hud-value": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-score": ["48px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .game-grid {
+            background-image: linear-gradient(to right, rgba(69, 70, 77, 0.2) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(69, 70, 77, 0.2) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .tetromino-cyan { background-color: #06b6d4; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(6, 182, 212, 0.5); }
+        .tetromino-blue { background-color: #3b82f6; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(59, 130, 246, 0.5); }
+        .tetromino-orange { background-color: #f97316; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(249, 115, 22, 0.5); }
+        .tetromino-yellow { background-color: #eab308; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(234, 179, 8, 0.5); }
+        .tetromino-green { background-color: #22c55e; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(34, 197, 94, 0.5); }
+        .tetromino-purple { background-color: #a855f7; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(168, 85, 247, 0.5); }
+        .tetromino-red { background-color: #ef4444; box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(239, 68, 68, 0.5); }
+        
+        .ghost-piece { border: 2px solid rgba(255,255,255,0.3); background-color: rgba(255,255,255,0.05); }
+        
+        .hud-box {
+            border: 1px solid #45464d;
+            background-color: #1f1f21;
+        }
+        
+        .control-btn {
+            border: 1px solid #909097;
+            background-color: transparent;
+        }
+        .control-btn:active {
+            background-color: #bec6e0;
+            color: #131315;
+            border-color: #bec6e0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-base overflow-hidden selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-container-padding h-14 z-50">
+<div class="flex items-center gap-4">
+<span class="font-hud-label text-hud-label font-bold tracking-tighter text-primary uppercase">Tetris Supervisor Root Fix 0513f</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:text-primary transition-colors duration-200 active:scale-95 flex items-center justify-center w-touch-target-min h-touch-target-min focus:outline focus:outline-2 focus:outline-on-surface">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">pause</span>
+</button>
+<button class="text-primary hover:text-primary transition-colors duration-200 active:scale-95 flex items-center justify-center w-touch-target-min h-touch-target-min focus:outline focus:outline-2 focus:outline-on-surface">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Game Area -->
+<main class="flex-grow flex flex-col md:flex-row justify-center items-start md:items-center p-container-padding gap-8 relative z-10">
+<!-- Left Sidebar: Hold & Stats -->
+<aside class="flex flex-col gap-6 w-full md:w-48 order-2 md:order-1 items-center md:items-end">
+<!-- Hold Module -->
+<div class="hud-box w-32 flex flex-col">
+<div class="px-2 py-1 border-b border-outline-variant bg-surface-container-high">
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block text-center">Hold</span>
+</div>
+<div class="h-24 flex items-center justify-center p-4 bg-surface-container">
+<!-- I Piece in Hold -->
+<div class="grid grid-cols-4 grid-rows-1 gap-[1px]">
+<div class="w-6 h-6 tetromino-cyan"></div>
+<div class="w-6 h-6 tetromino-cyan"></div>
+<div class="w-6 h-6 tetromino-cyan"></div>
+<div class="w-6 h-6 tetromino-cyan"></div>
+</div>
+</div>
+</div>
+<!-- Stats Module -->
+<div class="hud-box w-48 flex flex-col mt-auto">
+<div class="px-2 py-1 border-b border-outline-variant bg-surface-container-high">
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block text-center">Stats</span>
+</div>
+<div class="p-4 bg-surface-container flex flex-col gap-4">
+<div>
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block">Lines</span>
+<span class="font-hud-value text-hud-value text-on-surface block">42</span>
+</div>
+<div>
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block">High Score</span>
+<span class="font-hud-value text-hud-value text-on-surface block">8,450</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center: Game Board (10x20 Grid) -->
+<section class="order-1 md:order-2 flex justify-center w-full md:w-auto">
+<div class="relative bg-primary-container border-2 border-outline-variant game-grid w-[320px] h-[640px] overflow-hidden shadow-[0_0_24px_rgba(15,23,42,0.8)]">
+<!-- Placed Blocks (Static) -->
+<!-- Bottom Row -->
+<div class="absolute bottom-0 left-[0px] w-block-size h-block-size tetromino-blue"></div>
+<div class="absolute bottom-0 left-[32px] w-block-size h-block-size tetromino-blue"></div>
+<div class="absolute bottom-0 left-[64px] w-block-size h-block-size tetromino-blue"></div>
+<div class="absolute bottom-0 left-[160px] w-block-size h-block-size tetromino-orange"></div>
+<div class="absolute bottom-0 left-[192px] w-block-size h-block-size tetromino-orange"></div>
+<div class="absolute bottom-0 left-[224px] w-block-size h-block-size tetromino-orange"></div>
+<div class="absolute bottom-[32px] left-[64px] w-block-size h-block-size tetromino-blue"></div>
+<div class="absolute bottom-[32px] left-[160px] w-block-size h-block-size tetromino-orange"></div>
+<!-- Falling Piece (Active) -->
+<!-- T Piece -->
+<div class="absolute top-[160px] left-[128px] w-block-size h-block-size tetromino-purple z-10"></div>
+<div class="absolute top-[192px] left-[96px] w-block-size h-block-size tetromino-purple z-10"></div>
+<div class="absolute top-[192px] left-[128px] w-block-size h-block-size tetromino-purple z-10"></div>
+<div class="absolute top-[192px] left-[160px] w-block-size h-block-size tetromino-purple z-10"></div>
+<!-- Ghost Piece -->
+<div class="absolute bottom-[0px] left-[128px] w-block-size h-block-size ghost-piece"></div>
+<div class="absolute bottom-[0px] left-[96px] w-block-size h-block-size ghost-piece"></div>
+<div class="absolute bottom-[32px] left-[128px] w-block-size h-block-size ghost-piece"></div>
+<div class="absolute bottom-[0px] left-[160px] w-block-size h-block-size ghost-piece"></div>
+</div>
+</section>
+<!-- Right Sidebar: Next & HUD -->
+<aside class="flex flex-col gap-6 w-full md:w-48 order-3 items-center md:items-start">
+<!-- HUD Modules -->
+<div class="w-full flex flex-col gap-4">
+<div class="hud-box w-full flex flex-col">
+<div class="px-2 py-1 border-b border-outline-variant bg-surface-container-high">
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block text-center">Score</span>
+</div>
+<div class="p-4 bg-surface-container text-center">
+<span class="font-display-score text-display-score text-primary block">1240</span>
+</div>
+</div>
+<div class="hud-box w-full flex flex-col">
+<div class="px-2 py-1 border-b border-outline-variant bg-surface-container-high">
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block text-center">Level</span>
+</div>
+<div class="p-4 bg-surface-container text-center">
+<span class="font-hud-value text-hud-value text-on-surface block text-3xl">5</span>
+</div>
+</div>
+</div>
+<!-- Next Module -->
+<div class="hud-box w-32 flex flex-col">
+<div class="px-2 py-1 border-b border-outline-variant bg-surface-container-high">
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase block text-center">Next</span>
+</div>
+<div class="flex flex-col items-center justify-start p-4 bg-surface-container gap-6 min-h-[240px]">
+<!-- Next 1: O Piece -->
+<div class="grid grid-cols-2 grid-rows-2 gap-[1px]">
+<div class="w-6 h-6 tetromino-yellow"></div>
+<div class="w-6 h-6 tetromino-yellow"></div>
+<div class="w-6 h-6 tetromino-yellow"></div>
+<div class="w-6 h-6 tetromino-yellow"></div>
+</div>
+<!-- Next 2: Z Piece -->
+<div class="grid grid-cols-3 grid-rows-2 gap-[1px]">
+<div class="w-6 h-6 tetromino-red"></div>
+<div class="w-6 h-6 tetromino-red"></div>
+<div class="col-start-2 w-6 h-6 tetromino-red"></div>
+<div class="col-start-3 w-6 h-6 tetromino-red"></div>
+</div>
+<!-- Next 3: S Piece -->
+<div class="grid grid-cols-3 grid-rows-2 gap-[1px]">
+<div class="col-start-2 w-6 h-6 tetromino-green"></div>
+<div class="col-start-3 w-6 h-6 tetromino-green"></div>
+<div class="col-start-1 row-start-2 w-6 h-6 tetromino-green"></div>
+<div class="col-start-2 row-start-2 w-6 h-6 tetromino-green"></div>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Mobile Touch Controls (Visible on desktop for demonstration as requested) -->
+<footer class="bg-surface-container border-t border-outline-variant p-4 w-full z-40 mt-auto flex flex-col gap-4 pb-8">
+<div class="flex justify-between max-w-lg mx-auto w-full px-4">
+<!-- Left Controls: Movement -->
+<div class="flex gap-2">
+<button class="control-btn text-on-surface flex items-center justify-center w-14 h-14 rounded focus:outline focus:outline-2 focus:outline-on-surface transition-colors">
+<span class="material-symbols-outlined text-3xl">arrow_left</span>
+</button>
+<div class="flex flex-col gap-2">
+<button class="control-btn text-on-surface flex items-center justify-center w-14 h-14 rounded focus:outline focus:outline-2 focus:outline-on-surface transition-colors">
+<span class="material-symbols-outlined text-3xl">arrow_drop_down</span>
+</button>
+</div>
+<button class="control-btn text-on-surface flex items-center justify-center w-14 h-14 rounded focus:outline focus:outline-2 focus:outline-on-surface transition-colors">
+<span class="material-symbols-outlined text-3xl">arrow_right</span>
+</button>
+</div>
+<!-- Right Controls: Action -->
+<div class="flex gap-4">
+<button class="control-btn text-on-surface flex items-center justify-center w-14 h-14 rounded-full focus:outline focus:outline-2 focus:outline-on-surface transition-colors">
+<span class="material-symbols-outlined text-2xl">rotate_right</span>
+</button>
+<button class="control-btn border-primary text-primary hover:bg-primary/10 flex items-center justify-center w-16 h-16 rounded-full focus:outline focus:outline-2 focus:outline-primary transition-colors">
+<span class="font-button-text text-button-text uppercase tracking-widest text-xs">Drop</span>
+</button>
+</div>
+</div>
+</footer>
+</body></html>

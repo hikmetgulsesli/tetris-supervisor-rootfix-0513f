@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pause Overlay - Tetris Supervisor Root Fix 0513f</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#233144",
+                        "surface-variant": "#353436",
+                        "surface": "#131315",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-primary-container": "#798098",
+                        "surface-tint": "#bec6e0",
+                        "tertiary-container": "#231500",
+                        "secondary-container": "#3c4a5e",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131315",
+                        "inverse-surface": "#e4e2e4",
+                        "on-tertiary": "#3e2d11",
+                        "on-surface": "#e4e2e4",
+                        "on-tertiary-container": "#957d5a",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#45464d",
+                        "on-tertiary-fixed": "#271901",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "primary-container": "#0f172a",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-bright": "#39393b",
+                        "inverse-primary": "#565e74",
+                        "tertiary-fixed": "#fcdeb5",
+                        "secondary": "#b9c7e0",
+                        "on-secondary-container": "#abb9d2",
+                        "surface-container-low": "#1b1b1d",
+                        "background": "#131315",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#303032",
+                        "secondary-fixed": "#d5e3fd",
+                        "on-background": "#e4e2e4",
+                        "primary": "#bec6e0",
+                        "outline": "#909097",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary": "#dec29a",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "primary-fixed": "#dae2fd",
+                        "on-primary": "#283044",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container": "#1f1f21",
+                        "surface-container-high": "#2a2a2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "grid-gutter": "16px",
+                        "container-padding": "24px",
+                        "touch-target-min": "44px",
+                        "block-size": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Hanken Grotesk"],
+                        "button-text": ["Hanken Grotesk"],
+                        "hud-label": ["JetBrains Mono"],
+                        "hud-value": ["Hanken Grotesk"],
+                        "display-score": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button-text": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "hud-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "hud-value": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-score": ["48px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased h-screen w-full overflow-hidden flex flex-col selection:bg-primary selection:text-on-primary">
+<!-- Mock Background (Game Board Context) -->
+<div class="fixed inset-0 z-0 flex items-center justify-center pointer-events-none opacity-30">
+<!-- Center Game Well -->
+<div class="w-[320px] h-[640px] border-2 border-outline-variant relative grid grid-cols-10 grid-rows-20 gap-px bg-surface-container-lowest">
+<!-- Grid Lines -->
+<div class="absolute inset-0 border-[0.5px] border-outline-variant/20 border-dashed pointer-events-none grid grid-cols-10 grid-rows-20 w-full h-full">
+<!-- Repeated blocks for grid effect -->
+<div class="border-[0.5px] border-outline-variant/20"></div>
+<div class="border-[0.5px] border-outline-variant/20"></div>
+</div>
+<!-- Mock Pieces -->
+<div class="col-start-4 row-start-19 w-full h-full bg-secondary border-t border-l border-white/30"></div>
+<div class="col-start-5 row-start-19 w-full h-full bg-secondary border-t border-l border-white/30"></div>
+<div class="col-start-6 row-start-19 w-full h-full bg-secondary border-t border-l border-white/30"></div>
+<div class="col-start-7 row-start-19 w-full h-full bg-secondary border-t border-l border-white/30"></div>
+</div>
+<!-- Left HUD Context -->
+<div class="absolute left-8 top-1/4 flex flex-col gap-6">
+<div class="border border-outline-variant bg-surface p-4 w-32">
+<div class="font-hud-label text-hud-label text-on-surface-variant uppercase mb-2">Hold</div>
+<div class="w-full h-16 bg-surface-container-low flex items-center justify-center">
+<div class="w-8 h-8 bg-tertiary border-t border-l border-white/30"></div>
+</div>
+</div>
+<div class="border border-outline-variant bg-surface p-4 w-32">
+<div class="font-hud-label text-hud-label text-on-surface-variant uppercase mb-2">Score</div>
+<div class="font-display-score text-display-score text-primary">02450</div>
+</div>
+</div>
+</div>
+<!-- PAUSE MODAL OVERLAY -->
+<!-- The exact requirement: Semi-transparent dark overlay (#0F172A at 80% opacity) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-primary-container/80 backdrop-blur-md">
+<!-- Modal Container -->
+<div class="relative w-full max-w-sm mx-auto flex flex-col items-center">
+<!-- Small Stat Box (Current Score) -->
+<div class="absolute -top-16 left-1/2 -translate-x-1/2 bg-surface border border-outline-variant px-6 py-2 flex flex-col items-center shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase tracking-widest">Current Score</span>
+<span class="font-hud-value text-hud-value text-primary">02450</span>
+</div>
+<!-- Header -->
+<h1 class="font-headline-lg text-[64px] font-extrabold text-on-surface uppercase tracking-tighter mb-12 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                Paused
+            </h1>
+<!-- Actions Menu -->
+<div class="flex flex-col gap-4 w-full max-w-[240px]">
+<!-- Resume Button (Primary Focus) -->
+<button class="group relative w-full h-[56px] bg-transparent border-2 border-primary hover:bg-primary transition-colors duration-200 flex items-center justify-center focus:outline focus:outline-2 focus:outline-white focus:outline-offset-2 active:bg-primary-fixed-dim">
+<span class="font-button-text text-button-text text-primary group-hover:text-on-primary transition-colors duration-200 uppercase tracking-widest">
+                        Resume
+                    </span>
+<!-- Decorative Corners -->
+<div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-primary group-hover:border-on-primary transition-colors duration-200 -translate-x-1 -translate-y-1"></div>
+<div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-primary group-hover:border-on-primary transition-colors duration-200 translate-x-1 translate-y-1"></div>
+</button>
+<!-- Restart Button -->
+<button class="w-full h-[56px] bg-surface-container border border-outline-variant hover:border-on-surface transition-colors duration-200 flex items-center justify-center focus:outline focus:outline-2 focus:outline-white focus:outline-offset-2 active:bg-surface-container-high">
+<span class="font-button-text text-button-text text-on-surface-variant uppercase tracking-widest hover:text-on-surface transition-colors duration-200">
+                        Restart
+                    </span>
+</button>
+<!-- Quit Button -->
+<button class="w-full h-[56px] bg-surface-container border border-outline-variant hover:border-error transition-colors duration-200 flex items-center justify-center mt-4 focus:outline focus:outline-2 focus:outline-white focus:outline-offset-2 active:bg-surface-container-high group">
+<span class="font-button-text text-button-text text-on-surface-variant group-hover:text-error transition-colors duration-200 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+                        Quit To Menu
+                    </span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

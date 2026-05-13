@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tetris Supervisor - Controls Help</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#233144",
+                        "surface-variant": "#353436",
+                        "surface": "#131315",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-primary-container": "#798098",
+                        "surface-tint": "#bec6e0",
+                        "tertiary-container": "#231500",
+                        "secondary-container": "#3c4a5e",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131315",
+                        "inverse-surface": "#e4e2e4",
+                        "on-tertiary": "#3e2d11",
+                        "on-surface": "#e4e2e4",
+                        "on-tertiary-container": "#957d5a",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#45464d",
+                        "on-tertiary-fixed": "#271901",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "primary-container": "#0f172a",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-bright": "#39393b",
+                        "inverse-primary": "#565e74",
+                        "tertiary-fixed": "#fcdeb5",
+                        "secondary": "#b9c7e0",
+                        "on-secondary-container": "#abb9d2",
+                        "surface-container-low": "#1b1b1d",
+                        "background": "#131315",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#303032",
+                        "secondary-fixed": "#d5e3fd",
+                        "on-background": "#e4e2e4",
+                        "primary": "#bec6e0",
+                        "outline": "#909097",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary": "#dec29a",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "primary-fixed": "#dae2fd",
+                        "on-primary": "#283044",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container": "#1f1f21",
+                        "surface-container-high": "#2a2a2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "grid-gutter": "16px",
+                        "container-padding": "24px",
+                        "touch-target-min": "44px",
+                        "block-size": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Hanken Grotesk"],
+                        "button-text": ["Hanken Grotesk"],
+                        "hud-label": ["JetBrains Mono"],
+                        "hud-value": ["Hanken Grotesk"],
+                        "display-score": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button-text": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "hud-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "hud-value": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-score": ["48px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for an arcade feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131315; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #45464d; 
+            border: 1px solid #131315;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #909097; 
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-base text-body-base h-screen w-screen overflow-hidden flex flex-col selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar Component -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant flex justify-between items-center w-full px-container-padding h-14 z-50 fixed top-0 left-0 right-0">
+<div class="font-hud-label text-hud-label font-bold tracking-tighter text-primary dark:text-primary uppercase">
+            Tetris Supervisor Root Fix 0513f
+        </div>
+<div class="flex items-center gap-4 hidden md:flex text-primary dark:text-primary">
+<button class="hover:text-primary transition-colors duration-200 active:scale-95 flex items-center justify-center min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="hover:text-primary transition-colors duration-200 active:scale-95 flex items-center justify-center min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="hover:text-primary transition-colors duration-200 active:scale-95 flex items-center justify-center min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex-1 flex flex-row overflow-hidden pt-14">
+<!-- SideNavBar Component -->
+<nav class="hidden md:flex flex-col bg-surface-container dark:bg-surface-container border-r border-outline-variant w-64 h-full z-40">
+<div class="p-4 border-b border-outline-variant flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest border border-outline flex items-center justify-center rounded-none">
+<span class="material-symbols-outlined text-primary">shield_person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface">Root Admin</span>
+<span class="font-hud-label text-hud-label text-on-surface-variant uppercase">V0513F-PRO</span>
+</div>
+</div>
+<div class="p-4 border-b border-outline-variant">
+<button class="w-full bg-transparent border border-primary text-primary hover:bg-primary hover:text-on-primary transition-colors duration-150 py-2 font-hud-label text-hud-label uppercase tracking-widest h-touch-target-min flex items-center justify-center rounded-none active:scale-95">
+                    START_SESSION
+                </button>
+</div>
+<ul class="flex-1 overflow-y-auto py-2 flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-highest px-4 py-3 font-hud-label text-hud-label uppercase hover:text-primary transition-colors duration-150 focus:outline focus:outline-2 focus:outline-on-surface active:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+                        Terminal
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-highest px-4 py-3 font-hud-label text-hud-label uppercase hover:text-primary transition-colors duration-150 focus:outline focus:outline-2 focus:outline-on-surface active:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+                        Performance
+                    </a>
+</li>
+<li>
+<!-- Active State -->
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container border-l-4 border-primary px-4 py-3 font-hud-label text-hud-label uppercase" href="#">
+<span class="material-symbols-outlined" data-icon="keyboard">keyboard</span>
+                        Input Mapping
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-highest px-4 py-3 font-hud-label text-hud-label uppercase hover:text-primary transition-colors duration-150 focus:outline focus:outline-2 focus:outline-on-surface active:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+                        System
+                    </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant py-2">
+<a class="flex items-center gap-3 text-error hover:bg-error/10 px-4 py-3 font-hud-label text-hud-label uppercase transition-colors duration-150 focus:outline focus:outline-2 focus:outline-error" href="#">
+<span class="material-symbols-outlined" data-icon="power_settings_new">power_settings_new</span>
+                    Shutdown
+                </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-background p-container-padding">
+<div class="max-w-6xl mx-auto flex flex-col gap-8 pb-12">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Input Mapping</h1>
+<p class="text-on-surface-variant font-hud-label text-hud-label mt-1 uppercase opacity-80">Reference Documentation // V.1.0.4</p>
+</div>
+<button class="border border-outline-variant bg-surface hover:bg-surface-container-highest text-on-surface px-6 h-touch-target-min font-hud-label text-hud-label uppercase flex items-center justify-center gap-2 transition-colors active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary rounded-none">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                        BACK
+                    </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-grid-gutter">
+<!-- Keyboard Mapping Card -->
+<div class="col-span-1 lg:col-span-7 bg-surface-container border border-outline-variant p-6 flex flex-col gap-6 rounded-none relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+<h2 class="font-hud-label text-hud-label text-primary uppercase border-b border-outline-variant pb-2 flex justify-between items-center">
+<span>Hardware Keyboard</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">keyboard</span>
+</h2>
+<div class="flex-1 flex flex-col md:flex-row gap-8 items-center justify-center py-4">
+<!-- Movement Cluster -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-12 h-12 border-2 border-outline bg-surface-container-highest flex items-center justify-center shadow-[0_4px_0_0_#1b1b1d] active:shadow-none active:translate-y-1 transition-all rounded-none">
+<span class="material-symbols-outlined text-on-surface">arrow_upward</span>
+</div>
+<div class="flex gap-2">
+<div class="w-12 h-12 border-2 border-outline bg-surface-container-highest flex items-center justify-center shadow-[0_4px_0_0_#1b1b1d] active:shadow-none active:translate-y-1 transition-all rounded-none">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</div>
+<div class="w-12 h-12 border-2 border-outline bg-surface-container-highest flex items-center justify-center shadow-[0_4px_0_0_#1b1b1d] active:shadow-none active:translate-y-1 transition-all rounded-none relative">
+<div class="absolute top-1 left-1 w-1 h-1 bg-primary rounded-full"></div>
+<span class="material-symbols-outlined text-on-surface">arrow_downward</span>
+</div>
+<div class="w-12 h-12 border-2 border-outline bg-surface-container-highest flex items-center justify-center shadow-[0_4px_0_0_#1b1b1d] active:shadow-none active:translate-y-1 transition-all rounded-none">
+<span class="material-symbols-outlined text-on-surface">arrow_forward</span>
+</div>
+</div>
+<span class="font-hud-label text-hud-label text-on-surface-variant mt-2">Move / Rotate</span>
+</div>
+<!-- Action Keys -->
+<div class="flex flex-col gap-4 w-full max-w-[200px]">
+<div class="flex gap-4">
+<div class="flex-1 flex flex-col items-center gap-1">
+<div class="w-12 h-12 border-2 border-outline bg-surface-container-highest flex items-center justify-center font-hud-value text-hud-value text-on-surface shadow-[0_4px_0_0_#1b1b1d] active:shadow-none active:translate-y-1 transition-all rounded-none">
+                                            C
+                                        </div>
+<span class="font-hud-label text-[10px] text-on-surface-variant uppercase">Hold</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1">
+<div class="w-12 h-12 border-2 border-outline bg-surface-container-highest flex items-center justify-center font-hud-value text-hud-value text-on-surface shadow-[0_4px_0_0_#1b1b1d] active:shadow-none active:translate-y-1 transition-all rounded-none">
+                                            P
+                                        </div>
+<span class="font-hud-label text-[10px] text-on-surface-variant uppercase">Pause</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1 w-full">
+<div class="w-full h-12 border-2 border-primary bg-primary/10 flex items-center justify-center font-hud-label text-hud-label text-primary uppercase shadow-[0_4px_0_0_rgba(190,198,224,0.3)] active:shadow-none active:translate-y-1 transition-all tracking-widest rounded-none">
+                                        Space
+                                    </div>
+<span class="font-hud-label text-[10px] text-primary uppercase">Hard Drop</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Touch Screen Mapping Card -->
+<div class="col-span-1 lg:col-span-5 bg-surface-container border border-outline-variant p-6 flex flex-col gap-6 rounded-none relative">
+<h2 class="font-hud-label text-hud-label text-secondary uppercase border-b border-outline-variant pb-2 flex justify-between items-center">
+<span>Touch Telemetry</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">touch_app</span>
+</h2>
+<div class="flex-1 flex items-center justify-center py-2">
+<!-- Simulated Mobile Device Screen -->
+<div class="w-[200px] h-[340px] border-4 border-surface-variant bg-surface-container-lowest rounded-xl relative overflow-hidden flex flex-col shadow-lg">
+<!-- Top Bar (Decorative) -->
+<div class="h-4 bg-surface-variant/50 w-full mb-1"></div>
+<!-- Play Area Placeholder -->
+<div class="flex-1 mx-4 border border-outline-variant/30 border-dashed relative">
+<!-- Tap Zones Overlay -->
+<div class="absolute inset-0 flex">
+<!-- Left Side: Move Left -->
+<div class="w-1/2 h-full bg-blue-500/10 border-r border-blue-500/20 flex items-center justify-center flex-col gap-2">
+<span class="material-symbols-outlined text-secondary opacity-50">swipe_left</span>
+<span class="font-hud-label text-[10px] text-secondary opacity-70">L</span>
+</div>
+<!-- Right Side: Move Right -->
+<div class="w-1/2 h-full bg-blue-500/10 flex items-center justify-center flex-col gap-2">
+<span class="material-symbols-outlined text-secondary opacity-50">swipe_right</span>
+<span class="font-hud-label text-[10px] text-secondary opacity-70">R</span>
+</div>
+</div>
+<!-- Top Zone: Rotate -->
+<div class="absolute top-0 left-0 w-full h-1/3 bg-tertiary/10 border-b border-tertiary/20 flex items-start justify-center pt-4">
+<div class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-tertiary opacity-70">rotate_right</span>
+<span class="font-hud-label text-[8px] text-tertiary uppercase opacity-80 bg-background px-1 rounded-sm">Tap: Rotate</span>
+</div>
+</div>
+<!-- Bottom Zone: Hard Drop -->
+<div class="absolute bottom-0 left-0 w-full h-1/4 bg-error/10 border-t border-error/20 flex items-end justify-center pb-4">
+<div class="flex flex-col items-center gap-1">
+<span class="font-hud-label text-[8px] text-error uppercase opacity-80 bg-background px-1 rounded-sm">Swipe Down</span>
+<span class="material-symbols-outlined text-error opacity-70">keyboard_double_arrow_down</span>
+</div>
+</div>
+</div>
+<div class="h-6 w-full mt-1"></div>
+</div>
+</div>
+</div>
+<!-- Rules & Scoring System -->
+<div class="col-span-1 lg:col-span-12 bg-surface-container border border-outline-variant p-6 flex flex-col gap-6 rounded-none">
+<h2 class="font-hud-label text-hud-label text-tertiary uppercase border-b border-outline-variant pb-2 flex justify-between items-center">
+<span>System Metrics &amp; Scoring Matrix</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">functions</span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Text Explanation -->
+<div class="flex flex-col gap-4 text-on-surface-variant text-sm">
+<p class="leading-relaxed">
+                                    The core objective is to manage the descending data blocks (Minos). Construct continuous horizontal lines spanning the entire matrix width (10 cells). Complete lines will be purged from memory, resulting in a structural cascade.
+                                </p>
+<ul class="flex flex-col gap-2 font-hud-label text-[11px] uppercase tracking-wide">
+<li class="flex items-center gap-2 text-on-surface">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+<span class="w-16">Single:</span> 1 Line cleared. Base efficiency.
+                                    </li>
+<li class="flex items-center gap-2 text-on-surface">
+<span class="w-1.5 h-1.5 bg-secondary"></span>
+<span class="w-16">Double:</span> 2 Lines cleared. Optimal routine.
+                                    </li>
+<li class="flex items-center gap-2 text-on-surface">
+<span class="w-1.5 h-1.5 bg-tertiary"></span>
+<span class="w-16">Triple:</span> 3 Lines cleared. Advanced execution.
+                                    </li>
+<li class="flex items-center gap-2 text-error">
+<span class="w-1.5 h-1.5 bg-error animate-pulse"></span>
+<span class="w-16 font-bold">Tetris:</span> 4 Lines cleared. Maximum yield.
+                                    </li>
+</ul>
+</div>
+<!-- Data Table -->
+<div class="border border-outline-variant bg-surface rounded-none overflow-hidden">
+<table class="w-full text-left font-hud-label text-hud-label">
+<thead class="bg-surface-variant text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-4 py-3 font-medium uppercase tracking-wider">Operation</th>
+<th class="px-4 py-3 font-medium uppercase tracking-wider text-right">Base Output</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/50 text-on-surface">
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-4 py-3 border-l-2 border-transparent">Soft Drop</td>
+<td class="px-4 py-3 text-right font-hud-value text-[14px]">1 <span class="text-[10px] text-on-surface-variant">/cell</span></td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-4 py-3 border-l-2 border-primary">Hard Drop</td>
+<td class="px-4 py-3 text-right font-hud-value text-[14px] text-primary">2 <span class="text-[10px] text-on-surface-variant">/cell</span></td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-4 py-3 border-l-2 border-transparent">Single Clear</td>
+<td class="px-4 py-3 text-right font-hud-value text-[14px]">100</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-4 py-3 border-l-2 border-secondary">Double Clear</td>
+<td class="px-4 py-3 text-right font-hud-value text-[14px] text-secondary">300</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td class="px-4 py-3 border-l-2 border-tertiary">Triple Clear</td>
+<td class="px-4 py-3 text-right font-hud-value text-[14px] text-tertiary">500</td>
+</tr>
+<tr class="bg-error/5 hover:bg-error/10 transition-colors">
+<td class="px-4 py-3 border-l-2 border-error font-bold text-error">Tetris Clear</td>
+<td class="px-4 py-3 text-right font-hud-value text-[14px] font-bold text-error drop-shadow-[0_0_8px_rgba(255,180,171,0.5)]">800</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
